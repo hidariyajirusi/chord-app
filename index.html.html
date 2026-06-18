@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God Chord Generator - 7 Divine Progressions</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 { margin-bottom: 20px; font-size: 22px; color: #2c3e50; }
+        
+        .ai-box {
+            background: #f8f9fa;
+            border: 2px dashed #e74c3c;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .ai-input {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .btn-ai {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            width: auto;
+            box-shadow: 0 3px 6px rgba(231, 76, 60, 0.2);
+        }
+        .btn-ai:hover { background-color: #c0392b; }
+
+        .key-controller {
+            background: #edf2f7;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .key-badge {
+            background: #2c3e50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .btn-key {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .btn-key:hover { background: #f8fafc; }
+
+        .chord-display {
+            font-size: 54px;
+            font-weight: bold;
+            color: #2c3e50;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            background: #ecf0f1;
+            border-radius: 8px;
+            letter-spacing: 1px;
+        }
+        .btn-next {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(44, 62, 80, 0.2);
+        }
+        .btn-next:hover { background-color: #1a252f; transform: translateY(-1px); }
+        .status { font-size: 13px; color: #7f8c8d; margin-top: 10px; line-height: 1.4; text-align: left; background: #fdfdfd; padding: 10px; border-radius: 6px; border: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>7大名曲進行・隠し味エンジン</h1>
+    
+    <div class="ai-box">
+        <p style="font-size: 13px; font-weight: bold; margin: 0 0 10px 0; color: #e74c3c;">🔮 AIムード指示インジェクター</p>
+        <input type="text" id="aiPrompt" class="ai-input" placeholder="例：東方風、激しいバトル、切ないボカロ曲">
+        <button id="aiBtn" class="btn-ai">AIに音楽をハックさせる</button>
+    </div>
+
+    <div class="key-controller">
+        <button class="btn-key" id="keyDown">♭ Key Down</button>
+        <span id="keyDisplay" class="key-badge">Key: C (±0)</span>
+        <button class="btn-key" id="keyUp"># Key Up</button>
+    </div>
+
+    <div class="chord-display" id="chordDisplay">--</div>
+    
+    <button id="nextBtn" class="btn-next">次のコードを鳴らす</button>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+    
+    <div class="status" id="statusText">
+        <strong>【AI解析・進行潜伏ステータス】</strong><br>
+        28個のコードに、4536/カノン/マルサ/小室/ZUN進行の種が「低確率」で埋め込まれました。弾くたびに奇跡の巡り合わせが起きます。
+    </div>
+</div>
+
+<script>
+// --- 1. 12半音定義 & トランスポーズ設定 ---
+const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+let currentTranspose = 0;
+
+const chordIntervals = {
+    "C":     [0, 4, 7],      "F":     [5, 9, 12],     "G":     [7, 11, 14], 
+    "Am":    [9, 12, 16],    "Dm":    [2, 5, 9],      "Em":    [4, 7, 11], 
+    "CM7":   [0, 4, 7, 11],  "FM7":   [5, 9, 12, 16], "G7":    [7, 11, 14, 17], 
+    "Am7":   [9, 12, 16, 19],"Dm7":   [2, 5, 9, 12],  "Em7":   [4, 7, 11, 14],
+    "Fm":    [5, 8, 12],     "Gm":    [7, 10, 14],    "Csus4": [0, 5, 7], 
+    "Gsus4": [7, 12, 14],    "Asus4": [9, 14, 16],    "A":     [9, 13, 16], 
+    "E":     [4, 8, 11],     "E7":    [4, 8, 11, 14], "Bm7-5": [11, 14, 17, 21],
+    "G/B":   [-1, 2, 7, 11], "F#m7-5":[6, 9, 12, 16], "G#dim": [8, 11, 14, 20],
+    "C7":    [0, 4, 7, 10],  "A7":    [9, 13, 16, 19],"Ab":    [8, 12, 15],    "Bb":    [10, 14, 17]
+};
+
+function getTransposedChordName(baseName) {
+    if (baseName === "G/B") {
+        return `${NOTE_NAMES[(7 + currentTranspose + 12) % 12]}/${NOTE_NAMES[(11 + currentTranspose + 12) % 12]}`;
+    }
+    let root = "", suffix = "";
+    if (baseName.startsWith("C#") || baseName.startsWith("D#") || baseName.startsWith("F#") || baseName.startsWith("G#") || baseName.startsWith("A#")) {
+        root = baseName.substring(0, 2); suffix = baseName.substring(2);
+    } else {
+        root = baseName.substring(0, 1); suffix = baseName.substring(1);
+    }
+    const origIndex = NOTE_NAMES.indexOf(root);
+    if (origIndex === -1) return baseName;
+    return NOTE_NAMES[(origIndex + currentTranspose + 12) % 12] + suffix;
+}
+
+function getFreqFromStep(step) {
+    return 261.63 * Math.pow(2, (step + currentTranspose) / 12);
+}
+
+// --- 2. 7大名曲進行が「低確率」で発動するように仕込まれた神マトリクス ---
+const baseMatrix = {
+    // カノン進行 (C->G->Am->Em) や 下降進行 (C->G/B) が10%〜20%で発生
+    "C":     { "G/B": 0.2, "G": 0.15, "C7": 0.25, "FM7": 0.2, "Am7": 0.2 }, 
+    "C7":    { "FM7": 0.7, "F": 0.3 },
+    "G/B":   { "Am7": 0.6, "Am": 0.4 },
+    "CM7":   { "C7": 0.3, "FM7": 0.3, "Am7": 0.2, "Gm": 0.2 }, // 下降進行パーツ
+    "Csus4": { "C": 0.8, "C7": 0.2 },
+    // F➔Gから4536やカノン、上昇進行(G#dim/Ab)へ分岐
+    "F":     { "G": 0.4, "G7": 0.2, "Fm": 0.2, "Bb": 0.2 },
+    // FM7➔G7は「4536進行」の入り口（あえてG7へ15%の低確率ルートを設定）、マルサ進行(E7)へも15%
+    "FM7":   { "G7": 0.15, "E7": 0.15, "Fm": 0.2, "Bb": 0.3, "F#m7-5": 0.2 },
+    "Fm":    { "C": 0.4, "Ab": 0.6 },
+    "F#m7-5":{ "G7": 0.5, "G": 0.5 },
+    // G➔Amで小室進行・ZUN進行パーツ、G➔G#dimで上昇パッシング
+    "G":     { "Am": 0.15, "Am7": 0.15, "G#dim": 0.3, "Ab": 0.2, "C": 0.2 },
+    // G7➔Em7で「4536進行」が完成へ向かう
+    "G7":    { "Em7": 0.2, "Em": 0.1, "CM7": 0.3, "C": 0.2, "G#dim": 0.2 },
+    "G#dim": { "Am7": 0.5, "Am": 0.5 },
+    "Gsus4": { "G": 0.7, "G7": 0.3 },
+    // AmからFへ（小室・ZUN進行の黄金ルートを15%で設置）、A7でマルサ終息
+    "Am":    { "F": 0.15, "FM7": 0.15, "A7": 0.3, "Dm7": 0.2, "G/B": 0.2 },
+    "Am7":   { "F": 0.15, "FM7": 0.15, "A7": 0.3, "Dm7": 0.2, "Bm7-5": 0.2 },
+    "Asus4": { "Am": 0.5, "A": 0.5 },
+    "A":     { "Dm7": 0.7, "Dm": 0.3 },
+    "A7":    { "Dm7": 0.8, "Dm": 0.2 },
+    "Dm":    { "G7": 0.4, "Bb": 0.4, "G/B": 0.2 },
+    "Dm7":   { "G7": 0.4, "Bb": 0.4, "Gsus4": 0.2 },
+    // Em/Em7➔FまたはAm（カノン進行の着地、4536の着地へと繋ぐ）
+    "Em":    { "F": 0.2, "FM7": 0.2, "Am7": 0.4, "Am": 0.2 },
+    "Em7":   { "Am7": 0.4, "Am": 0.2, "F": 0.2, "FM7": 0.2 },
+    "E":     { "Am": 0.7, "Am7": 0.3 },
+    // E7➔Amで「ZUN進行」「マルサ進行」の強烈な和風・情熱的解決
+    "E7":    { "Am": 0.6, "Am7": 0.4 },
+    // Gm➔C7の下り坂
+    "Gm":    { "C7": 0.7, "FM7": 0.3 },
+    "Bm7-5": { "E7": 0.8, "E": 0.2 },
+    "Ab":    { "Bb": 0.8, "C": 0.2 },
+    "Bb":    { "C": 0.6, "CM7": 0.2, "Csus4": 0.2 }
+};
+
+let currentMatrix = JSON.parse(JSON.stringify(baseMatrix));
+
+// --- 3. 状態管理 & 再生 ---
+let currentChord = "C";
+let audioCtx = null;
+let activeOscillators = [];
+
+function getNextChord(current) {
+    const candidates = currentMatrix[current];
+    if (!candidates) return "C";
+    const rand = Math.random();
+    let cumulative = 0;
+    for (const [chord, prob] of Object.entries(candidates)) {
+        cumulative += prob;
+        if (rand < cumulative) return chord;
+    }
+    return Object.keys(candidates)[0];
+}
+
+function playChord(chordName) {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    
+    const now = audioCtx.currentTime;
+    activeOscillators.forEach(oscData => {
+        try {
+            oscData.gainNode.gain.cancelScheduledValues(now);
+            oscData.gainNode.gain.setValueAtTime(oscData.gainNode.gain.value, now);
+            oscData.gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+            oscData.osc.stop(now + 0.1);
+        } catch(e) {}
+    });
+    activeOscillators = [];
+
+    const intervals = chordIntervals[chordName];
+    if (!intervals) return;
+
+    intervals.forEach(step => {
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(getFreqFromStep(step), now);
+        const maxGain = intervals.length === 3 ? 0.08 : 0.06;
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(maxGain, now + 0.08);
+        gainNode.gain.setValueAtTime(maxGain, now + 1.2);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 1.5);
+        activeOscillators.push({ osc, gainNode });
+    });
+}
+
+// --- 4. スパイスを激増させるAIムードハック ---
+function simulateAIEngine(prompt) {
+    let newMatrix = JSON.parse(JSON.stringify(baseMatrix));
+    let activeTriggers = [];
+
+    if (prompt.includes("東方") || prompt.includes("ZUN")) {
+        activeTriggers.push("【ZUN進行】を35%までブースト（Am ➔ F ➔ G ➔ E7）");
+        newMatrix["Am"]["F"] = 0.4; newMatrix["G"]["E7"] = 0.4; newMatrix["E7"]["Am"] = 0.9;
+    }
+    if (prompt.includes("ボカロ") || prompt.includes("アニソン") || prompt.includes("4536")) {
+        activeTriggers.push("【4536王道進行】を40%までブースト（FM7 ➔ G7 ➔ Em7 ➔ Am7）");
+        newMatrix["FM7"]["G7"] = 0.5; newMatrix["G7"]["Em7"] = 0.5; newMatrix["Em7"]["Am7"] = 0.6;
+    }
+    if (prompt.includes("小室")) {
+        activeTriggers.push("【小室進行】を40%までブースト（Am ➔ F ➔ G ➔ C）");
+        newMatrix["Am"]["F"] = 0.5; newMatrix["F"]["G"] = 0.6; newMatrix["G"]["C"] = 0.5;
+    }
+    if (prompt.includes("マルサ") || prompt.includes("林檎")) {
+        activeTriggers.push("【マルサ進行】を40%までブースト（FM7 ➔ E7 ➔ Am7 ➔ C7）");
+        newMatrix["FM7"]["E7"] = 0.5; newMatrix["E7"]["Am7"] = 0.8; newMatrix["Am7"]["C7"] = 0.5;
+    }
+
+    if (activeTriggers.length === 0) {
+        activeTriggers.push("全7大名曲進行が低確率でバックグラウンドに潜伏中...");
+    }
+
+    return { matrix: newMatrix, triggers: activeTriggers };
+}
+
+// --- 5. UI制御 ---
+const nextBtn = document.getElementById("nextBtn");
+const chordDisplay = document.getElementById("chordDisplay");
+const aiBtn = document.getElementById("aiBtn");
+const aiPrompt = document.getElementById("aiPrompt");
+const statusText = document.getElementById("statusText");
+const keyDisplay = document.getElementById("keyDisplay");
+const keyUp = document.getElementById("keyUp");
+const keyDown = document.getElementById("keyDown");
+
+function updateDisplay() {
+    if (chordDisplay.innerText !== "--") {
+        chordDisplay.innerText = getTransposedChordName(currentChord);
+    }
+    const currentKeyName = NOTE_NAMES[(0 + currentTranspose + 12) % 12];
+    const sign = currentTranspose >= 0 ? `+${currentTranspose}` : `${currentTranspose}`;
+    keyDisplay.innerText = `Key: ${currentKeyName} (${sign})`;
+}
+
+keyUp.addEventListener("click", () => { if (currentTranspose < 6) { currentTranspose++; updateDisplay(); } });
+keyDown.addEventListener("click", () => { if (currentTranspose > -5) { currentTranspose--; updateDisplay(); } });
+
+nextBtn.addEventListener("click", () => {
+    currentChord = chordDisplay.innerText === "--" ? "C" : getNextChord(currentChord);
+    chordDisplay.innerText = getTransposedChordName(currentChord);
+    playChord(currentChord);
+});
+
+aiBtn.addEventListener("click", () => {
+    const text = aiPrompt.value.trim();
+    if (!text) return;
+    const result = simulateAIEngine(text);
+    currentMatrix = result.matrix;
+    let triggerHtml = result.triggers.map(t => `・${t}`).join("<br>");
+    statusText.innerHTML = `<strong>【AI解析ステータス：完了】</strong><br>プロンプト: 「${text}」<br>${triggerHtml}`;
+    chordDisplay.style.color = "#e74c3c";
+});
+</script>
+
+</body>
+</html>

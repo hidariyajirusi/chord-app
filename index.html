@@ -3,240 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>God Chord Generator - 7 Divine Progressions</title>
+    <title>Hidekazu Tanaka Deconstructed Architect (URL Shareable)</title>
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
+            background-color: #030308;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
         }
         .container {
-            background: white;
+            background: #090d16;
             padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            text-align: center;
-            max-width: 500px;
+            border-radius: 24px;
+            max-width: 800px;
             width: 100%;
+            border: 1px solid #1e293b;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.7);
         }
-        h1 { margin-bottom: 20px; font-size: 22px; color: #2c3e50; }
+        h1 { margin: 0 0 5px 0; font-size: 26px; color: #38bdf8; font-weight: 900; letter-spacing: 1px; text-align: center; }
+        .subtitle { font-size: 11px; color: #64748b; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
         
-        .ai-box {
-            background: #f8f9fa;
-            border: 2px dashed #e74c3c;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .ai-input {
-            width: 90%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .btn-ai {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            font-size: 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            width: auto;
-            box-shadow: 0 3px 6px rgba(231, 76, 60, 0.2);
-        }
-        .btn-ai:hover { background-color: #c0392b; }
-
-        .key-controller {
-            background: #edf2f7;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+        .toolbar {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-        }
-        .key-badge {
-            background: #2c3e50;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .btn-key {
-            background: #fff;
-            border: 1px solid #cbd5e1;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .btn-key:hover { background: #f8fafc; }
-
-        .chord-display {
-            font-size: 54px;
-            font-weight: bold;
-            color: #2c3e50;
-            height: 100px;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 15px 0;
-            background: #ecf0f1;
-            border-radius: 8px;
-            letter-spacing: 1px;
+            background: #010205;
+            padding: 15px 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border: 1px solid #1e293b;
+            gap: 10px;
         }
-        .btn-next {
-            background-color: #2c3e50;
+        .btn-main {
+            background: linear-gradient(135deg, #06b6d4 0%, #ec4899 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 18px;
-            border-radius: 25px;
+            padding: 14px 24px;
+            font-size: 14px;
+            font-weight: 900;
+            border-radius: 30px;
             cursor: pointer;
             transition: all 0.2s;
-            width: 100%;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(44, 62, 80, 0.2);
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
         }
-        .btn-next:hover { background-color: #1a252f; transform: translateY(-1px); }
-        .status { font-size: 13px; color: #7f8c8d; margin-top: 10px; line-height: 1.4; text-align: left; background: #fdfdfd; padding: 10px; border-radius: 6px; border: 1px solid #eee; }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(6, 182, 212, 0.5); }
+        
+        .btn-share {
+            background: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #334155;
+            padding: 14px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-share:hover { background: #334155; color: #fff; }
+
+        .key-control { display: flex; align-items: center; gap: 10px; }
+        .btn-key { background: #1e293b; color: white; border: 1px solid #334155; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-key:hover { background: #334155; }
+        .key-badge { background: #ec4899; color: #fff; padding: 4px 12px; border-radius: 20px; font-weight: 900; font-size: 13px; white-space: nowrap; }
+
+        .section-card {
+            background: #0f172a;
+            border-left: 5px solid #64748b;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-top: 1px solid #1e293b;
+            border-right: 1px solid #1e293b;
+            border-bottom: 1px solid #1e293b;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .section-card:hover { background: #131c35; }
+        .section-card.active {
+            border-left-color: #38bdf8;
+            background: #111c3a;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .label-name { font-size: 16px; font-weight: 900; letter-spacing: 1px; }
+        
+        .color-Intro { color: #38bdf8; }
+        .color-A-Melody { color: #34d399; }
+        .color-B-Melody { color: #f59e0b; }
+        .color-Chorus { color: #ec4899; }
+        .color-Interlude { color: #a78bfa; }
+        .color-Last-Chorus { color: #f43f5e; }
+        .color-Outro { color: #94a3b8; }
+
+        .mod-info { font-size: 10px; background: #020408; padding: 3px 10px; border-radius: 12px; color: #94a3b8; font-weight: bold; }
+
+        .chord-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .chord-block {
+            background: #020408;
+            border: 1px solid #1e293b;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            color: #cbd5e1;
+        }
+        .chord-block.playing {
+            background: #38bdf8;
+            color: #000;
+            border-color: #fff;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
+        }
+
+        .sec-desc { font-size: 11px; color: #64748b; line-height: 1.4; background: #020408; padding: 8px 12px; border-radius: 6px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>7大名曲進行・隠し味エンジン</h1>
+    <h1>Hidekazu Tanaka Deconstructed</h1>
+    <div class="subtitle">楽曲構成ランダマイザ＆URL共有システム</div>
     
-    <div class="ai-box">
-        <p style="font-size: 13px; font-weight: bold; margin: 0 0 10px 0; color: #e74c3c;">🔮 AIムード指示インジェクター</p>
-        <input type="text" id="aiPrompt" class="ai-input" placeholder="例：東方風、激しいバトル、切ないボカロ曲">
-        <button id="aiBtn" class="btn-ai">AIに音楽をハックさせる</button>
+    <div class="toolbar">
+        <button class="btn-main" id="generateBtn">新構成で再構築</button>
+        <button class="btn-share" id="shareBtn">構成URLをコピー</button>
+        <div class="key-control">
+            <button class="btn-key" id="keyDown">♭</button>
+            <span id="keyDisplay" class="key-badge">Key: C (±0)</span>
+            <button class="btn-key" id="keyUp">#</button>
+        </div>
     </div>
 
-    <div class="key-controller">
-        <button class="btn-key" id="keyDown">♭ Key Down</button>
-        <span id="keyDisplay" class="key-badge">Key: C (±0)</span>
-        <button class="btn-key" id="keyUp"># Key Up</button>
-    </div>
-
-    <div class="chord-display" id="chordDisplay">--</div>
-    
-    <button id="nextBtn" class="btn-next">次のコードを鳴らす</button>
-
-    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-    
-    <div class="status" id="statusText">
-        <strong>【AI解析・進行潜伏ステータス】</strong><br>
-        28個のコードに、4536/カノン/マルサ/小室/ZUN進行の種が「低確率」で埋め込まれました。弾くたびに奇跡の巡り合わせが起きます。
-    </div>
+    <div id="songContainer"></div>
 </div>
 
 <script>
-// --- 1. 12半音定義 & トランスポーズ設定 ---
 const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 let currentTranspose = 0;
+let currentStructureData = []; // 現在の [ { secKey, patternIdx }, ... ] を保持
 
 const chordIntervals = {
-    "C":     [0, 4, 7],      "F":     [5, 9, 12],     "G":     [7, 11, 14], 
-    "Am":    [9, 12, 16],    "Dm":    [2, 5, 9],      "Em":    [4, 7, 11], 
-    "CM7":   [0, 4, 7, 11],  "FM7":   [5, 9, 12, 16], "G7":    [7, 11, 14, 17], 
-    "Am7":   [9, 12, 16, 19],"Dm7":   [2, 5, 9, 12],  "Em7":   [4, 7, 11, 14],
-    "Fm":    [5, 8, 12],     "Gm":    [7, 10, 14],    "Csus4": [0, 5, 7], 
-    "Gsus4": [7, 12, 14],    "Asus4": [9, 14, 16],    "A":     [9, 13, 16], 
-    "E":     [4, 8, 11],     "E7":    [4, 8, 11, 14], "Bm7-5": [11, 14, 17, 21],
-    "G/B":   [-1, 2, 7, 11], "F#m7-5":[6, 9, 12, 16], "G#dim": [8, 11, 14, 20],
-    "C7":    [0, 4, 7, 10],  "A7":    [9, 13, 16, 19],"Ab":    [8, 12, 15],    "Bb":    [10, 14, 17]
+    "C": [0,4,7], "CM7": [0,4,7,11], "C7": [0,4,7,10], "C7(b9)": [0,4,7,10,13], "Csus4": [0,5,7], "Cdim7": [0,3,6,9], "Cm7": [0,3,7,10],
+    "DbM7": [1,5,8,12], "DbM7/C": [0,13,17,20], "Dm7": [2,5,9,12], "Dm9": [2,5,9,12,16], "EbM7": [3,7,10,14], "Edim7": [4,7,10,13],
+    "Em7": [4,7,11,14], "E7": [4,8,11,14], "E7(b9)": [4,8,11,14,17], "F": [5,9,12], "FM7": [5,9,12,16], "FM7(9)": [5,9,12,16,21],
+    "Fm7": [5,8,12,15], "F/G": [7,17,21,24], "F#dim7": [6,9,12,15], "F#m7-5": [6,9,12,16], "G": [7,11,14], "G7": [7,11,14,17],
+    "G7(b9)": [7,11,14,17,20], "G/A": [9,19,23,26], "G#dim7": [8,11,14,17], "Am": [9,12,16], "Am7": [9,12,16,19], "Am9": [9,12,16,19,23],
+    "AbM7": [8,12,15,19], "Ab7": [8,12,15,18], "BbM7": [10,14,17,21], "Bb7": [10,14,17,20], "Bm7-5": [11,14,17,21], "Bdim7": [11,14,17,20], "Gm7": [7,10,14,17],
+    "D": [2,6,9], "DM7": [2,6,9,13], "D7": [2,6,9,12], "Em9": [4,7,11,14,18], "C#m7-5": [1,4,7,11], "F#7(b9)": [6,10,13,16,19], "Bm7": [11,14,18,21], "A7": [9,13,16,19]
 };
 
-function getTransposedChordName(baseName) {
-    if (baseName === "G/B") {
-        return `${NOTE_NAMES[(7 + currentTranspose + 12) % 12]}/${NOTE_NAMES[(11 + currentTranspose + 12) % 12]}`;
-    }
-    let root = "", suffix = "";
-    if (baseName.startsWith("C#") || baseName.startsWith("D#") || baseName.startsWith("F#") || baseName.startsWith("G#") || baseName.startsWith("A#")) {
-        root = baseName.substring(0, 2); suffix = baseName.substring(2);
-    } else {
-        root = baseName.substring(0, 1); suffix = baseName.substring(1);
-    }
-    const origIndex = NOTE_NAMES.indexOf(root);
-    if (origIndex === -1) return baseName;
-    return NOTE_NAMES[(origIndex + currentTranspose + 12) % 12] + suffix;
-}
-
-function getFreqFromStep(step) {
-    return 261.63 * Math.pow(2, (step + currentTranspose) / 12);
-}
-
-// --- 2. 7大名曲進行が「低確率」で発動するように仕込まれた神マトリクス ---
-const baseMatrix = {
-    // カノン進行 (C->G->Am->Em) や 下降進行 (C->G/B) が10%〜20%で発生
-    "C":     { "G/B": 0.2, "G": 0.15, "C7": 0.25, "FM7": 0.2, "Am7": 0.2 }, 
-    "C7":    { "FM7": 0.7, "F": 0.3 },
-    "G/B":   { "Am7": 0.6, "Am": 0.4 },
-    "CM7":   { "C7": 0.3, "FM7": 0.3, "Am7": 0.2, "Gm": 0.2 }, // 下降進行パーツ
-    "Csus4": { "C": 0.8, "C7": 0.2 },
-    // F➔Gから4536やカノン、上昇進行(G#dim/Ab)へ分岐
-    "F":     { "G": 0.4, "G7": 0.2, "Fm": 0.2, "Bb": 0.2 },
-    // FM7➔G7は「4536進行」の入り口（あえてG7へ15%の低確率ルートを設定）、マルサ進行(E7)へも15%
-    "FM7":   { "G7": 0.15, "E7": 0.15, "Fm": 0.2, "Bb": 0.3, "F#m7-5": 0.2 },
-    "Fm":    { "C": 0.4, "Ab": 0.6 },
-    "F#m7-5":{ "G7": 0.5, "G": 0.5 },
-    // G➔Amで小室進行・ZUN進行パーツ、G➔G#dimで上昇パッシング
-    "G":     { "Am": 0.15, "Am7": 0.15, "G#dim": 0.3, "Ab": 0.2, "C": 0.2 },
-    // G7➔Em7で「4536進行」が完成へ向かう
-    "G7":    { "Em7": 0.2, "Em": 0.1, "CM7": 0.3, "C": 0.2, "G#dim": 0.2 },
-    "G#dim": { "Am7": 0.5, "Am": 0.5 },
-    "Gsus4": { "G": 0.7, "G7": 0.3 },
-    // AmからFへ（小室・ZUN進行の黄金ルートを15%で設置）、A7でマルサ終息
-    "Am":    { "F": 0.15, "FM7": 0.15, "A7": 0.3, "Dm7": 0.2, "G/B": 0.2 },
-    "Am7":   { "F": 0.15, "FM7": 0.15, "A7": 0.3, "Dm7": 0.2, "Bm7-5": 0.2 },
-    "Asus4": { "Am": 0.5, "A": 0.5 },
-    "A":     { "Dm7": 0.7, "Dm": 0.3 },
-    "A7":    { "Dm7": 0.8, "Dm": 0.2 },
-    "Dm":    { "G7": 0.4, "Bb": 0.4, "G/B": 0.2 },
-    "Dm7":   { "G7": 0.4, "Bb": 0.4, "Gsus4": 0.2 },
-    // Em/Em7➔FまたはAm（カノン進行の着地、4536の着地へと繋ぐ）
-    "Em":    { "F": 0.2, "FM7": 0.2, "Am7": 0.4, "Am": 0.2 },
-    "Em7":   { "Am7": 0.4, "Am": 0.2, "F": 0.2, "FM7": 0.2 },
-    "E":     { "Am": 0.7, "Am7": 0.3 },
-    // E7➔Amで「ZUN進行」「マルサ進行」の強烈な和風・情熱的解決
-    "E7":    { "Am": 0.6, "Am7": 0.4 },
-    // Gm➔C7の下り坂
-    "Gm":    { "C7": 0.7, "FM7": 0.3 },
-    "Bm7-5": { "E7": 0.8, "E": 0.2 },
-    "Ab":    { "Bb": 0.8, "C": 0.2 },
-    "Bb":    { "C": 0.6, "CM7": 0.2, "Csus4": 0.2 }
+const structureBlueprints = {
+    "Intro": [["CM7", "DbM7/C", "CM7", "F/G"], ["FM7", "G/A", "Dm9", "F/G"]],
+    "A-Melody": [["FM7", "BbM7", "Am7", "Dm7", "FM7", "BbM7", "Am7", "C7"], ["FM7(9)", "DbM7/C", "CM7", "Am7", "Dm9", "BbM7", "F/G", "C"]],
+    "B-Melody": [["Bm7-5", "E7(b9)", "Am9", "C7", "FM7", "Fm7", "Bb7", "F/G"], ["AbM7", "Bb7", "Gm7", "Cm7", "Fm7", "Bb7", "EbM7", "F/G"]],
+    "Chorus": [["FM7", "G7", "Em7", "Am7", "Dm7", "G7(b9)", "CM7", "C7"], ["FM7", "E7(b9)", "Am9", "Gm7", "C7(b9)", "FM7", "F/G", "CM7"]],
+    "Interlude": [["EbM7", "DbM7", "EbM7", "F/G"], ["AbM7", "Bb7", "Gm7", "C7(b9)"]],
+    "Last-Chorus": [["G/A", "DM7", "E7", "C#m7-5", "F#7(b9)", "Bm7", "Em9", "A7"]],
+    "Outro": [["FM7", "BbM7", "Am7", "AbM7", "DbM7/C", "CM7", "Csus4", "CM7"]]
 };
 
-let currentMatrix = JSON.parse(JSON.stringify(baseMatrix));
+const sectionMetaData = {
+    "Intro": { name: "イントロ", mod: "Key: C 主調", desc: "分数コードやブラックアダーコードを配した、リスナーを引き摺り込むための導入部。" },
+    "A-Melody": { name: "Aメロ", mod: "Key: C 浮遊", desc: "ルートの着地を焦らし、お洒落で涼しい風を吹かせる浮遊ループセクション。" },
+    "B-Melody": { name: "Bメロ", mod: "★ 哀愁急降下転調", desc: "サビ前で突然同主短調や短3度下に急降下。感情を限界まで揺さぶるエモの溜め処。" },
+    "Chorus": { name: "サビ", mod: "Key: C 帰還カタルシス", desc: "複雑な仕掛けを全て肯定する王道の爆発セクション。オルタードセブンスが隠し味。" },
+    "Interlude": { name: "間奏（インスト）", mod: "★ 空間跳躍フュージョン", desc: "J-POPのルールを無視した、知的でスリリングなインスト系フュージョン進行。" },
+    "Last-Chorus": { name: "ラスサビ", mod: "★ 全音ブースト (Key: D)", desc: "調性を全音上に無理やり引き上げ、感情の天井を突き破る、彼が最も愛した破壊的ギミック。" },
+    "Outro": { name: "アウトロ", mod: "Key: C 浮遊余韻", desc: "物語の終焉。解決しきらない浮いた和音の残響を残してフェードアウトします。" }
+};
 
-// --- 3. 状態管理 & 再生 ---
-let currentChord = "C";
 let audioCtx = null;
 let activeOscillators = [];
+let currentPlayingTimeout = null;
 
-function getNextChord(current) {
-    const candidates = currentMatrix[current];
-    if (!candidates) return "C";
-    const rand = Math.random();
-    let cumulative = 0;
-    for (const [chord, prob] of Object.entries(candidates)) {
-        cumulative += prob;
-        if (rand < cumulative) return chord;
+function getTransposedChordName(baseName) {
+    if (baseName.includes("/")) {
+        const parts = baseName.split("/");
+        return `${getSingleChordName(parts[0])}/${getSingleChordName(parts[1])}`;
     }
-    return Object.keys(candidates)[0];
+    return getSingleChordName(baseName);
+}
+
+function getSingleChordName(name) {
+    let root = "", suffix = "";
+    if (/^(C#|D#|F#|G#|A#|Bb|Ab|Eb|Db)/.test(name)) { root = name.substring(0, 2); suffix = name.substring(2); }
+    else { root = name.substring(0, 1); suffix = name.substring(1); }
+    if (root === "Bb") root = "A#"; if (root === "Ab") root = "G#";
+    if (root === "Eb") root = "D#"; if (root === "Db") root = "C#";
+    const origIndex = NOTE_NAMES.indexOf(root);
+    if (origIndex === -1) return name;
+    return NOTE_NAMES[(origIndex + currentTranspose + 12) % 12] + suffix;
 }
 
 function playChord(chordName) {
@@ -248,8 +219,8 @@ function playChord(chordName) {
         try {
             oscData.gainNode.gain.cancelScheduledValues(now);
             oscData.gainNode.gain.setValueAtTime(oscData.gainNode.gain.value, now);
-            oscData.gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-            oscData.osc.stop(now + 0.1);
+            oscData.gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            oscData.osc.stop(now + 0.05);
         } catch(e) {}
     });
     activeOscillators = [];
@@ -257,90 +228,189 @@ function playChord(chordName) {
     const intervals = chordIntervals[chordName];
     if (!intervals) return;
 
-    intervals.forEach(step => {
+    intervals.forEach((step, index) => {
         const osc = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(getFreqFromStep(step), now);
-        const maxGain = intervals.length === 3 ? 0.08 : 0.06;
+        osc.type = 'sine';
+        let freq = 261.63 * Math.pow(2, (step + currentTranspose) / 12);
+        if (index === 0) freq = freq / 4; 
+        osc.frequency.setValueAtTime(freq, now);
+        const maxGain = index === 0 ? 0.09 : 0.04;
         gainNode.gain.setValueAtTime(0, now);
-        gainNode.gain.linearRampToValueAtTime(maxGain, now + 0.08);
-        gainNode.gain.setValueAtTime(maxGain, now + 1.2);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+        gainNode.gain.linearRampToValueAtTime(maxGain, now + 0.04);
+        gainNode.gain.setValueAtTime(maxGain, now + 0.6);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
         osc.connect(gainNode);
         gainNode.connect(audioCtx.destination);
         osc.start(now);
-        osc.stop(now + 1.5);
+        osc.stop(now + 0.9);
         activeOscillators.push({ osc, gainNode });
     });
 }
 
-// --- 4. スパイスを激増させるAIムードハック ---
-function simulateAIEngine(prompt) {
-    let newMatrix = JSON.parse(JSON.stringify(baseMatrix));
-    let activeTriggers = [];
+// 内部データ（currentStructureData）に基づきHTMLを描画する
+function renderStructureFromData() {
+    clearTimeout(currentPlayingTimeout);
+    document.querySelectorAll(".chord-block").forEach(b => b.classList.remove("playing"));
+    
+    const container = document.getElementById("songContainer");
+    container.innerHTML = "";
 
-    if (prompt.includes("東方") || prompt.includes("ZUN")) {
-        activeTriggers.push("【ZUN進行】を35%までブースト（Am ➔ F ➔ G ➔ E7）");
-        newMatrix["Am"]["F"] = 0.4; newMatrix["G"]["E7"] = 0.4; newMatrix["E7"]["Am"] = 0.9;
-    }
-    if (prompt.includes("ボカロ") || prompt.includes("アニソン") || prompt.includes("4536")) {
-        activeTriggers.push("【4536王道進行】を40%までブースト（FM7 ➔ G7 ➔ Em7 ➔ Am7）");
-        newMatrix["FM7"]["G7"] = 0.5; newMatrix["G7"]["Em7"] = 0.5; newMatrix["Em7"]["Am7"] = 0.6;
-    }
-    if (prompt.includes("小室")) {
-        activeTriggers.push("【小室進行】を40%までブースト（Am ➔ F ➔ G ➔ C）");
-        newMatrix["Am"]["F"] = 0.5; newMatrix["F"]["G"] = 0.6; newMatrix["G"]["C"] = 0.5;
-    }
-    if (prompt.includes("マルサ") || prompt.includes("林檎")) {
-        activeTriggers.push("【マルサ進行】を40%までブースト（FM7 ➔ E7 ➔ Am7 ➔ C7）");
-        newMatrix["FM7"]["E7"] = 0.5; newMatrix["E7"]["Am7"] = 0.8; newMatrix["Am7"]["C7"] = 0.5;
-    }
+    currentStructureData.forEach((item, index) => {
+        const secKey = item.secKey;
+        const patternIdx = item.patternIdx;
+        const meta = sectionMetaData[secKey];
+        const chosenPattern = structureBlueprints[secKey][patternIdx];
+        
+        const card = document.createElement("div");
+        card.className = "section-card";
+        card.id = `card-${index}-${secKey}`;
+        
+        const header = document.createElement("div");
+        header.className = "card-header";
+        header.innerHTML = `
+            <span class="label-name color-${secKey}">【M-${index + 1}: ${meta.name}】</span>
+            <span class="mod-info">${meta.mod}</span>
+        `;
+        card.appendChild(header);
+        
+        const grid = document.createElement("div");
+        grid.className = "chord-grid";
+        
+        chosenPattern.forEach((rawChord) => {
+            const block = document.createElement("div");
+            block.className = "chord-block";
+            block.innerText = getTransposedChordName(rawChord);
+            
+            block.addEventListener("click", (e) => {
+                e.stopPropagation();
+                document.querySelectorAll(".chord-block").forEach(b => b.classList.remove("playing"));
+                block.classList.add("playing");
+                playChord(rawChord);
+                setTimeout(() => block.classList.remove("playing"), 800);
+            });
+            grid.appendChild(block);
+        });
+        
+        card.appendChild(grid);
+        
+        const desc = document.createElement("div");
+        desc.className = "sec-desc";
+        desc.innerText = meta.desc;
+        card.appendChild(desc);
+        
+        card.addEventListener("click", () => {
+            clearTimeout(currentPlayingTimeout);
+            document.querySelectorAll(".section-card").forEach(c => c.classList.remove("active"));
+            card.classList.add("active");
+            playSectionSequentially(chosenPattern, grid);
+        });
+        
+        container.appendChild(card);
+    });
 
-    if (activeTriggers.length === 0) {
-        activeTriggers.push("全7大名曲進行が低確率でバックグラウンドに潜伏中...");
-    }
-
-    return { matrix: newMatrix, triggers: activeTriggers };
+    // URLを自動同期
+    updateURL();
 }
 
-// --- 5. UI制御 ---
-const nextBtn = document.getElementById("nextBtn");
-const chordDisplay = document.getElementById("chordDisplay");
-const aiBtn = document.getElementById("aiBtn");
-const aiPrompt = document.getElementById("aiPrompt");
-const statusText = document.getElementById("statusText");
-const keyDisplay = document.getElementById("keyDisplay");
-const keyUp = document.getElementById("keyUp");
-const keyDown = document.getElementById("keyDown");
-
-function updateDisplay() {
-    if (chordDisplay.innerText !== "--") {
-        chordDisplay.innerText = getTransposedChordName(currentChord);
+// 完全新規でランダムな構成を生成する
+function createNewRandomStructure() {
+    const pool = ["Intro", "A-Melody", "B-Melody", "Chorus", "Interlude", "Last-Chorus", "Outro"];
+    const sectionCount = Math.floor(Math.random() * 4) + 5; // 5〜8セクション
+    
+    currentStructureData = [];
+    for(let i=0; i < sectionCount; i++) {
+        const randomKey = pool[Math.floor(Math.random() * pool.length)];
+        const blueprints = structureBlueprints[randomKey];
+        const randomPatternIdx = Math.floor(Math.random() * blueprints.length);
+        currentStructureData.push({ secKey: randomKey, patternIdx: randomPatternIdx });
     }
+    renderStructureFromData();
+}
+
+function playSectionSequentially(pattern, gridElement) {
+    let currentIdx = 0;
+    const blocks = gridElement.querySelectorAll(".chord-block");
+    document.querySelectorAll(".chord-block").forEach(b => b.classList.remove("playing"));
+    
+    function playNext() {
+        if (currentIdx >= pattern.length) {
+            blocks[currentIdx - 1].classList.remove("playing");
+            return;
+        }
+        if (currentIdx > 0) { blocks[currentIdx - 1].classList.remove("playing"); }
+        blocks[currentIdx].classList.add("playing");
+        playChord(pattern[currentIdx]);
+        currentIdx++;
+        currentPlayingTimeout = setTimeout(playNext, 900);
+    }
+    playNext();
+}
+
+// URLパラメータへのエンコードと同期
+function updateURL() {
+    const structString = currentStructureData.map(item => `${item.secKey}-${item.patternIdx}`).join(",");
+    const newUrl = `${window.location.origin}${window.location.pathname}?key=${currentTranspose}&struct=${structString}`;
+    window.history.replaceState(null, '', newUrl);
+}
+
+// 起動時にURLから構成データをデコードして復元する
+function loadFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const keyParam = params.get("key");
+    const structParam = params.get("struct");
+    
+    if (keyParam !== null) {
+        currentTranspose = parseInt(keyParam, 10);
+    }
+    
+    if (structParam) {
+        try {
+            currentStructureData = structParam.split(",").map(part => {
+                const [secKey, idxStr] = part.split("-");
+                return { secKey: secKey, patternIdx: parseInt(idxStr, 10) };
+            });
+            renderStructureFromData();
+            return;
+        } catch(e) {
+            console.error("URLのパースに失敗しました。新規生成します。", e);
+        }
+    }
+    // パラメータが空か、失敗した場合は通常通りランダム生成
+    createNewRandomStructure();
+}
+
+// イベントリスナー
+document.getElementById("generateBtn").addEventListener("click", createNewRandomStructure);
+
+document.getElementById("shareBtn").addEventListener("click", () => {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        const btn = document.getElementById("shareBtn");
+        const origText = btn.innerText;
+        btn.innerText = "コピー完了！";
+        btn.style.background = "#34d399";
+        btn.style.color = "#000";
+        setTimeout(() => {
+            btn.innerText = origText;
+            btn.style.background = "#1e293b";
+            btn.style.color = "#38bdf8";
+        }, 2000);
+    });
+});
+
+function updateKeyDisplay() {
     const currentKeyName = NOTE_NAMES[(0 + currentTranspose + 12) % 12];
     const sign = currentTranspose >= 0 ? `+${currentTranspose}` : `${currentTranspose}`;
-    keyDisplay.innerText = `Key: ${currentKeyName} (${sign})`;
+    document.getElementById("keyDisplay").innerText = `Key: ${currentKeyName} (${sign})`;
+    // キー変更時は「現在の構成データ」を維持したまま、名前だけ変えて再描画
+    renderStructureFromData();
 }
 
-keyUp.addEventListener("click", () => { if (currentTranspose < 6) { currentTranspose++; updateDisplay(); } });
-keyDown.addEventListener("click", () => { if (currentTranspose > -5) { currentTranspose--; updateDisplay(); } });
+document.getElementById("keyUp").addEventListener("click", () => { if (currentTranspose < 6) { currentTranspose++; updateKeyDisplay(); } });
+document.getElementById("keyDown").addEventListener("click", () => { if (currentTranspose > -5) { currentTranspose--; updateKeyDisplay(); } });
 
-nextBtn.addEventListener("click", () => {
-    currentChord = chordDisplay.innerText === "--" ? "C" : getNextChord(currentChord);
-    chordDisplay.innerText = getTransposedChordName(currentChord);
-    playChord(currentChord);
-});
-
-aiBtn.addEventListener("click", () => {
-    const text = aiPrompt.value.trim();
-    if (!text) return;
-    const result = simulateAIEngine(text);
-    currentMatrix = result.matrix;
-    let triggerHtml = result.triggers.map(t => `・${t}`).join("<br>");
-    statusText.innerHTML = `<strong>【AI解析ステータス：完了】</strong><br>プロンプト: 「${text}」<br>${triggerHtml}`;
-    chordDisplay.style.color = "#e74c3c";
-});
+// アプリケーション初期化
+loadFromURL();
 </script>
 
 </body>
